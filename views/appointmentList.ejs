@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Appointment List</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 font-sans">
+    <div class="max-w-7xl mx-auto py-10">
+
+        <!-- Page Title -->
+        <h1 class="text-4xl font-bold text-center text-gray-800 mb-6">
+            Appointment List
+        </h1>
+
+        <!-- Table Container -->
+        <div class="overflow-x-auto shadow-lg rounded-lg bg-white">
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="bg-blue-600 text-white text-lg">
+                        <th class="py-3 px-6">Appointment ID</th>
+                        <th class="py-3 px-6">Doctor</th>
+                        <th class="py-3 px-6">Appointment Date</th>
+                        <th class="py-3 px-6">Appointment Time</th>
+                        <th class="py-3 px-6">Purpose</th>
+                        <th class="py-3 px-6 text-center">Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <% if (appointments && appointments.length> 0) { %>
+                        <% appointments.forEach(appointment=> { %>
+                            <tr class="border-b hover:bg-gray-100">
+                                <td class="py-3 px-6">
+                                    <%= appointment.id %>
+                                </td>
+                                <td class="py-3 px-6">
+                                    <%= appointment.doctor_id %>
+                                </td>
+                                <td class="py-3 px-6">
+                                    <%= appointment.appointment_date.toISOString().slice(0, 10) %>
+                                </td>
+                                <td class="py-3 px-6">
+                                    <%= appointment.appointment_time %>
+                                </td>
+                                <td class="py-3 px-6">
+                                    <%= appointment.purpose %>
+                                </td>
+                                <td class="py-3 px-6 text-center">
+                                    <form method="POST" action="/patients/appointment/delete" class="inline">
+                                        <input type="hidden" name="appointment_id" value="<%= appointment.id %>">
+                                        <input type="hidden" name="patient_id" value="<%= patient.id %>">
+                                        <button type="submit"
+                                            class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">Delete</button>
+                                    </form>
+                                </td>
+                            </tr>
+                            <% }); %>
+                                <% } else { %>
+                                    <tr>
+                                        <td colspan="6" class="py-6 px-6 text-center text-red-600 text-lg font-medium">
+                                            No appointments available for this patient ID.
+                                        </td>
+                                    </tr>
+                                    <% } %>
+                </tbody>
+
+            </table>
+        </div>
+
+    </div>
+</body>
+
+</html>

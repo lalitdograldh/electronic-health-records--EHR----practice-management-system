@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Schedule Appointment</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 font-sans">
+
+    <div class="min-h-screen flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-xl w-full max-w-6xl grid md:grid-cols-2 gap-6 overflow-hidden">
+
+            <!-- Left Side: Form -->
+            <div class="p-8 md:p-12">
+                <h1 class="text-3xl font-bold text-gray-800 mb-6">Schedule Appointment</h1>
+                <form action="/patients/appointments/add/<%= patient.id %>" method="post" class="space-y-5">
+                    <input type="hidden" name="patientId" value="<%= patient.id %>">
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label for="name" class="block text-gray-700 font-semibold mb-2">Name</label>
+                            <input type="text" id="name" name="name" value="<%= patient.name %>" required
+                                class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        </div>
+                        <div>
+                            <label for="age" class="block text-gray-700 font-semibold mb-2">Age</label>
+                            <input type="number" id="age" name="age" required
+                                class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label for="doctorName" class="block text-gray-700 font-semibold mb-2">Doctor Name</label>
+                            <select id="doctorName" name="doctorName" required
+                                class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <option value="">Select Doctor</option>
+                                <option value="3458">Dr Gurpreet Singh Wander</option>
+                                <option value="2901">Dr. Kartik Goyal</option>
+                                <option value="2900">Dr. Ankur Mittal</option>
+                                <option value="2889">Dr Shirin Garg</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="select_department" class="block text-gray-700 font-semibold mb-2">Department</label>
+                            <select id="select_department" name="select_department" required
+                                class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <option value="">Select Department</option>
+                                <option value="18">General Physician</option>
+                                <option value="19">Pediatrics</option>
+                                <option value="20">Dermatology</option>
+                                <option value="22">General Surgery</option>
+                                <option value="24">Orthopedics</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label for="appointmentDate" class="block text-gray-700 font-semibold mb-2">Appointment Date</label>
+                            <input type="date" id="appointmentDate" name="appointmentDate" required
+                                class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        </div>
+                        <div>
+                            <label for="timeSlot" class="block text-gray-700 font-semibold mb-2">Time Slot</label>
+                            <select id="timeSlot" name="timeSlot" required
+                                class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <option value="">Select Time Slot</option>
+                                <option value="09:00">09:00 AM</option>
+                                <option value="10:00">10:00 AM</option>
+                                <option value="11:00">11:00 AM</option>
+                                <option value="14:00">02:00 PM</option>
+                                <option value="15:00">03:00 PM</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label for="email" class="block text-gray-700 font-semibold mb-2">Email</label>
+                            <input type="email" id="email" name="email" value="<%= patient.email %>" required
+                                class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        </div>
+                        <div>
+                            <label for="createdBy" class="block text-gray-700 font-semibold mb-2">Created By</label>
+                            <select id="createdBy" name="createdBy" required
+                                class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <option value="">Select Creator</option>
+                                <option value="admin">Admin</option>
+                                <option value="staff">Staff</option>
+                                <option value="receptionist">Receptionist</option>
+                                <option value="doctor">Doctor</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 gap-4">
+                        
+                        <div>
+                            <label for="purpose" class="block text-gray-700 font-semibold mb-2">Purpose</label>
+                            <input type="text" id="purpose" name="purpose" required
+                                class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        </div>
+                    </div>
+
+                    <div class="text-center mt-4">
+                        <button type="submit"
+                            class="px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition duration-200 shadow-lg">
+                            Schedule Appointment
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Right Side: Info / Summary -->
+            <div class="bg-blue-50 p-8 flex flex-col justify-center items-center">
+                <h2 class="text-2xl font-bold text-blue-700 mb-4">Patient Info</h2>
+                <p class="text-gray-700 mb-2">You can display patient details here, like:</p>
+                <ul class="text-gray-600 list-disc list-inside">
+                    <li>ID, Name & Age</li>
+                    <li>Previous Appointments</li>
+                    <li>Medical History</li>
+                    <li>Doctor & Department</li>
+                </ul>
+                <p class="mt-6 text-gray-500 text-sm text-center">Ensure all fields are filled correctly to schedule the appointment successfully.</p>
+            </div>
+
+        </div>
+    </div>
+
+</body>
+
+</html>
