@@ -4,6 +4,7 @@ const router = express.Router();
 const PatientService = require("../service/PatientService");
 const AppointmentService = require("../service/AppointmentService");
 const NotesService = require("../service/NotesService");
+const DoctorService = require("../service/DoctorService");
 
 
 // -------------------------------------------------------
@@ -182,28 +183,47 @@ router.post("/notes/add/:id", async (req, res) => {
 // APPOINTMENTS SECTION
 // -------------------------------------------------------
 
-router.get("/appointments/:patientId", async (req, res) => {
-  const patientId = req.params.patientId;
-
+router.get("/appointments/:id", async (req, res) => {
+  
   try {
     // Fetch patient info
-    const [patientRows] = await PatientService.getPatientById(patientId);
-    if (!patientRows.length) return res.status(404).send("Patient not found");
-
-    const patient = patientRows[0];
-
-    // Fetch appointments for the patient
+    const patientId = req.params.id;
+    const [rows] = await PatientService.getPatientById(patientId);
+    if (!rows.length) return res.status(404).send("Patient not found");
+    const patient = rows[0];
     const [appointments] = await AppointmentService.getAppointmentsByPatient(patientId);
-
+    const [doctors] = await DoctorService.getAllDoctors();
+    
     res.render("appointmentList", {
       patient,
       appointments,
+      doctors
     });
   } catch (err) {
     console.error(err);
-    res.status(500).send("Error fetching appointments");
+    res.status(500).send("Internal Error");
   }
 });
+
+// -----------------------------------------------------
+// DELETE APPOINTMENT
+// -----------------------------------------------------
+router.post("/appointment/delete", async (req, res) => {
+    try {
+        const appointmentId = req.body.appointment_id;
+        const patientId = req.body.patient_id;
+
+        await AppointmentService.deleteAppointment(appointmentId);
+
+        // Redirect back to Appointment List page
+        res.redirect(`/patients/appointments/${patientId}`);
+
+    } catch (err) {
+        console.error(err);
+        res.status(500).send("Error deleting");
+    }
+});
+
 
 router.get("/appointments/add/:patientId", async (req, res) => {
   const patientId = req.params.patientId;
@@ -251,6 +271,28 @@ router.post("/appointments/add/:patientId", async (req, res) => {
   }
 });
 
+router.post("/appointment/update", async (req, res) => {
+    try {
+        const { appointment_id, patient_id, doctor_id, appointment_date, appointment_time, purpose } = req.body;
+
+        // Update the appointment using your service
+        await AppointmentService.updateAppointmentDetails({
+            purpose,
+            doctorName: doctor_id,
+            appointmentDate: appointment_date,
+            timeSlot: appointment_time,
+            appointmentId: appointment_id
+        });
+
+        // Redirect back to the appointment list for this patient
+        res.redirect(`/patients/appointments/${patient_id}`);
+    } catch (err) {
+        console.error(err);
+        res.status(500).send("Internal Server Error");
+    }
+});
+
+
 // Reschedule Form  
 router.get("/appointment/reschedule/:appointmentId", async (req, res) => {
   const appointmentId = req.params.appointmentId;
@@ -265,20 +307,7 @@ router.post("/appointment/reschedule/:appointmentId", async (req, res) => {
   });
 });
 
-// Delete Appointment
-router.post("/appointment/delete", async (req, res) => {
-  try {
-    const appointmentId = req.body.appointment_id;
-    const patientId = req.body.patient_id;
 
-    await AppointmentService.deleteAppointment(appointmentId);
-
-    res.redirect(`/patients/${patientId}`);
-  } catch (err) {
-    console.error(err);
-    res.status(500).send("Error deleting appointment");
-  }
-});
 
 
 // -------------------------------------------------------
